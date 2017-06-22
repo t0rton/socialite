@@ -69,16 +69,16 @@ class LoginController extends Controller
 
         $authUser = User::where('email', $user->email)->first();
         
-        if(empty($authUser->google_id)) {
+        if(!empty($authUser)) {
             return $this->updateUser($authUser, $user);
+        } else {
+            return User::create([
+                'name' => $user->name,
+                'google_id' => $user->id,
+                'email' => $user->email,
+                'avatar' => $user->avatar_original,
+            ]);
         }
-        
-        return User::create([
-            'name' => $user->name,
-            'google_id' => $user->id,
-            'email' => $user->email,
-            'avatar' => $user->avatar_original,
-        ]);
     }
 
     public function updateUser($authUser, $user)
